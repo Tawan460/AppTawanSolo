@@ -1,24 +1,22 @@
-import { getApps, getApp, initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-
+import firebase from 'firebase/compat'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
+import 'firebase/compat/storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAIveihpuCG6Qr-OLM9rEktviVtylHoLm0",
-    authDomain: "apprepaire.firebaseapp.com",
-    projectId: "apprepaire",
-    storageBucket: "apprepaire.appspot.com",
-    messagingSenderId: "865770311403",
-    appId: "1:865770311403:web:941fecaabb59a4d3fbb8ae",
-    measurementId: "G-5YXVENYXNR"
-  };
+  apiKey: "AIzaSyCpmrEhx0K0Db8xrnFZbIYuHHtQQVniUNM",
+  authDomain: "testpj-7c9f9.firebaseapp.com",
+  projectId: "testpj-7c9f9",
+  storageBucket: "testpj-7c9f9.appspot.com",
+  messagingSenderId: "1032964628062",
+  appId: "1:1032964628062:web:19fb3535453b671a339ecf"
+};
 
-const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig);
+if (!firebase.apps.length){
+  firebase.initializeApp(firebaseConfig)
+}
 
-const firebaseauth = getAuth(app);
-const firestoredb = getFirestore(app);
-
-export { app, firebaseauth, firestoredb };
+export {firebase};
 
 
 

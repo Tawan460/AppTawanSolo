@@ -4,7 +4,7 @@ import login from "./Screen/login"
 import menuhome from "./Screen/menuhome";
 import repair from "./Screen/repair";
 import register from "./Screen/register";
-import profile from "./Screen/profile";
+import profile from "./Screen/profile";import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 
 const Stack = createNativeStackNavigator();

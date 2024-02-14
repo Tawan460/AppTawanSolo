@@ -4,12 +4,27 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { firebase } from "../Screen/data"
 
 
 
 
 
 export default function repair({ navigation }) {
+  const [kana, setKana] = useState("");
+  const [name, setName] = useState("");
+  const [numbernisit, setNumbernisit] = useState("");
+  const [phonenumber, setNumPhonenumber] = useState("");
+  const [email , setEmail ] = useState ("")
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [room, setRoom] = useState("");
+  const [detail, setDetail] = useState("");
+
+
+  
+
   const[ modal,setModal ]=useState( false )
 
   const gomodal =()=>{
@@ -77,7 +92,7 @@ export default function repair({ navigation }) {
         </TouchableOpacity>
         
         <TouchableOpacity 
-        onPress={() => navigation.navigate("menuhome")}
+        onPress={() => handleSigup()}
         style={{
           width:150,
           height:40,
@@ -208,6 +223,7 @@ export default function repair({ navigation }) {
           <View>
           <TextInput 
            placeholder="กรุณากรอกคณะ"
+           onChangeText={(Text) => setKana(Text)}
           style={{
             borderBottomWidth:1,
             padding:5,
@@ -225,6 +241,7 @@ export default function repair({ navigation }) {
           <View>
           <TextInput 
            placeholder="กรุณากรอกชื่อ-นามสกุล"
+           onChangeText={(Text) => setName(Text)}
           style={{
             borderBottomWidth:1,
             padding:5,
@@ -242,6 +259,7 @@ export default function repair({ navigation }) {
           <View>
           <TextInput 
           placeholder="กรุณากรอกหมายเลข"
+          onChangeText={(Text) => setNumbernisit(Text)}
           style={{
             borderBottomWidth:1,
             padding:5,
@@ -261,6 +279,7 @@ export default function repair({ navigation }) {
            placeholder="กรุณากรอกคณะ"
            keyboardType="phone-pad"
            maxLength={10}
+           onChangeText={(Text) => setNumPhonenumber(Text)}
           style={{
             borderBottomWidth:1,
             padding:5,
@@ -279,7 +298,7 @@ export default function repair({ navigation }) {
           <TextInput 
            placeholder="กรุณากรอกอีเมล"
            autoComplete="Email"
-         
+           onChangeText={(Text) => setEmail(Text)}
           style={{
             borderBottomWidth:1,
             padding:5,
@@ -297,6 +316,7 @@ export default function repair({ navigation }) {
           <View>
           <TextInput 
            placeholder="วว/ดด/ปป"
+           onChangeText={(Text) => setDate(Text)}
           style={{
             borderBottomWidth:1,
             padding:5,
@@ -313,7 +333,7 @@ export default function repair({ navigation }) {
           </Text>
           <View>
           <TextInput
-           
+           onChangeText={(Text) => setTime(Text)}
           placeholder="เวลา"
           style={{
             borderBottomWidth:1,
@@ -331,6 +351,7 @@ export default function repair({ navigation }) {
           </Text>
           <View>
           <TextInput 
+          onChangeText={(Text) => setRoom(Text)}
            placeholder="ระบุห้องเรียน"
           style={{
             borderBottomWidth:1,
@@ -347,6 +368,7 @@ export default function repair({ navigation }) {
             รายละเอียดเพิ่มเติม
           </Text>
           <TextInput 
+          onChangeText={(Text) => setDetail(Text)}
           placeholder="รายละเอียดเพิ่มเติม"
           style={{
             borderBottomWidth:1,

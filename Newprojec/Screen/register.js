@@ -6,7 +6,7 @@ import { Fontisto } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseauth,firestoredb } from './data'; 
+import { firebase } from "../Screen/data"
 
 
 
@@ -17,28 +17,71 @@ export default function register({ navigation }) {
   const [password,setPassword]=useState("")
   const [confirmpassword,setConfirmpassword]=useState("")
 
-  const handleSignUp = async () => {
-    if (true && email !== "") {
-      await createUserWithEmailAndPassword(firebaseauth, email, password).then(
-        (userCred) => {
-          console.log("User Id : ", userCred.user.uid);
-          const data = {
-            _id: userCred.user.uid,
-            fullName: name,
-            profilePic: avatar,
-            providerData: userCred.user.providerData[0],
-          };
-
-          setDoc(doc(firestoredb, "users", userCred.user.uid), data).then(
-            () => {
-              navigation.navigate("LoginScreen");
-            }
-          );
+  const Checkinput = () => {
+    console.log("ดู", email.includes("@rmutp.ac.th"));
+    if (email === "") {
+      alert("กรุณากรอกอีเมล");
+    } else {
+      if (email.includes("@rmutp.ac.th") == false) {
+        alert("ต้องเป็น @rmutp.ac.th");
+      } else {
+        if (name === "") {
+          alert("กรุณากรอกชื่อนามสกุล");
+        } else if (studentnumber === "") {
+          alert("กรุณากรอกรหัสนีกศึกษา");
+        } else if (password === "") {
+          alert("กรุณากรอก password");
+        } else if (confirmpassword !== confirmpassword) {
+          alert("กรุณายืนยันรหัสผ่านให้ถูกต้อง");
+        } else {
+          console.log("กรอกครบแล้ว");
+          
+          handleSigup();
         }
-      );
+      }
     }
   };
-  
+
+  const handleSigup = () => {
+    console.log("email==> ", email);
+    console.log("password==> ", password);
+
+    const handleSigup = getAuth();
+    //  console.log("auth: ",auth);
+    createUserWithEmailAndPassword(handleSigup, email, password)
+      .then((userCredential) => {
+        console.log("userCredential: ", userCredential);
+        // Rigister
+        const user = userCredential.user.uid;
+        navigation.navigate("login")
+        firebase.firestore().collection("users").doc(user).set({
+          displayName: name,
+          studentnumber: studentnumber,
+          email: email,
+          password: password,
+          confirmpassword: confirmpassword
+        });
+        firebase
+          .firestore()
+          .collection("userA")
+          .doc("All")
+          .update({
+            ListName: firebase.firestore.FieldValue.arrayUnion({
+              email: email,
+              name: name,
+              
+            }),
+            
+          });
+          
+      })
+      
+      .catch(function (error) {
+        console.log("Error getting document: ", error);
+        
+      });
+      
+  };
 
 
   return (
@@ -175,6 +218,10 @@ export default function register({ navigation }) {
         placeholderTextColor="#CCCCCC"
         placeholder="กรอก Password"
         secureTextEntry={true}
+        style={{
+          width:250,
+          // backgroundColor:'red'
+        }}
         >         
         </TextInput>
         </View>
@@ -201,11 +248,15 @@ export default function register({ navigation }) {
         placeholderTextColor="#CCCCCC"
         placeholder="ยืนยัน Password"
         secureTextEntry={true}
+        style={{
+          width:250,
+          // backgroundColor:'red'
+        }}
         >
         </TextInput>
         </View>
           <TouchableOpacity 
-          onPress={() => handleSignUp()}
+          onPress={() => Checkinput()}
           style={{
             width:"68%",
             height:"20%",

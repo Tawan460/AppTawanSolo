@@ -1,10 +1,49 @@
 import { View, Image, TextInput, Text, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
+import React from 'react'
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
+import { useState } from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { firebase } from "../Screen/data"
 
 export default function login({ navigation }) {
+  // const [text, onChangeText] = React.useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const [showpassword, setshowpassword] = useState(true);
+
+  const togglepassword = () => {
+    setshowpassword(!showpassword)
+  };
+
+  const checkuser = () => {
+    console.log('อีเมล ', email);
+    console.log('พาสเวิด ', password);
+
+
+    const auth = getAuth();
+    console.log("auth: ", auth);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("userCredential: ", userCredential);
+        // Signed in
+        const user = userCredential.user;
+        navigation.navigate("menuhome")
+        // ...
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+        if (email === "") {
+          alert("กรุณาตรวจสอบอีเมล");
+        } else if (password === "") {
+          alert("กรุณากตรวจสอบpassword");
+        } else {
+          console.log("กรอกครบแล้ว");
+        }
+      });
+  };
+
   return (
     <View
       style={{
@@ -79,6 +118,7 @@ export default function login({ navigation }) {
             <TextInput
               placeholderTextColor="#808080"
               placeholder="Email"
+              onChangeText={(Text) => setemail(Text)}
             ></TextInput>
           </View>
           <Text
@@ -113,6 +153,10 @@ export default function login({ navigation }) {
               placeholderTextColor="#808080"
               placeholder="Password"
               secureTextEntry={true}
+              onChangeText={(Text) => setpassword(Text)}
+              style={{
+                width:250,
+              }}
             ></TextInput>
           </View>
           <TouchableOpacity>
@@ -135,7 +179,7 @@ export default function login({ navigation }) {
           }}
         >
           <TouchableOpacity
-            onPress={() => navigation.navigate("menuhome")}
+            onPress={() => checkuser()}
             style={{
               width: "70%",
               height: 40,
